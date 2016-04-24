@@ -1,5 +1,5 @@
 ---
-title: 'Course Project - Part2: Inferential Analysis of Tooth Growth in Guinea Pigs'
+title: 'Course Project - Part2: Analysis of Tooth Growth in Guinea Pigs'
 output: pdf_document
 geometry: margin=0.75in
 ---
@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 _Author: Imène Drir_ | Source: [github](http://github.com/minitelle/statinf)
 
 #### Overview
-In this part of the final project, we will explore the **ToothGrowth** data in the R datasets package. We will explore growth of teeth in 60 guinea pigs after they have been given three different doses of Vitamin C in the form of Orange Juice (OJ) or Asorbic acid (VC). [Source](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/ToothGrowth.html).
+In this part of the final project, we will explore the **ToothGrowth** data in the R datasets package. We will explore growth of odontoblastsof (cells responsible in teeth growth) in 60 guinea pigs after they have been given three different doses of Vitamin C in the form of Orange Juice (OJ) or Asorbic acid (VC). [Source](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/ToothGrowth.html).
 ```{r, echo=FALSE}
 #Load libraries
 library("datasets")

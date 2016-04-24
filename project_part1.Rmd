@@ -1,6 +1,5 @@
 ---
-title: 'Course Project - Part1: Exponential Distribution compared with the Central
-  Limit Theorem in R'
+title: 'Course Project - Part1: Exponential Distribution compared with the Central Limit Theorem in R'
 output: pdf_document
 ---
 ```{r setup, include=FALSE}
