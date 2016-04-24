@@ -1,0 +1,117 @@
+---
+title: 'Course Project - Part2: Inferential Analysis of Tooth Growth in Guinea Pigs'
+output: pdf_document
+geometry: margin=0.75in
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+_Author: Imène Drir_ | Source: [github](http://github.com/minitelle/statinf)
+
+#### Overview
+In this part of the final project, we will explore the **ToothGrowth** data in the R datasets package. We will explore growth of teeth in 60 guinea pigs after they have been given three different doses of Vitamin C in the form of Orange Juice (OJ) or Asorbic acid (VC). [Source](https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/ToothGrowth.html).
+```{r, echo=FALSE}
+#Load libraries
+library("datasets")
+library("stats")
+library("ggplot2")
+#Load dataset
+data("ToothGrowth")
+```
+#### Analysis
+To complete our analysis we will assume that:
+
++ The 60 tested guinea pigs have been grouped independently and have been picked from the same population of guinea pigs, i.e., they are identical and independent.
++ The variance of length in tooth growth between groups of tested guinea pigs is different.
++ We will use hypothesis testing to analyze the data and use an acceptable error rate $alpha$ of 5%.
+
+####1. Explore the DataSet 
+Let's first explore the dataset
+```{r Exploring ToothGrowth, echo=FALSE, tidy=TRUE}
+str(ToothGrowth)
+head(ToothGrowth, length(1:3))
+```
+The data is comprised of 60 observations with 3 variables:
+*Len*: Tooth length post dosage
+*Supp*: Supplement type, OJ for orange juice and, VC for an asorbic acid supplement.
+*dose*: The actual dose of the supplement, either 0.5, 1, 2 mg/day for per guinea pig.
+
+Plot of current dataset (see appendix for R code):
+
+```{r, echo = FALSE, fig.height=2.75, fig.width=7}
+g <- ggplot(data = ToothGrowth, facets=~dose, aes(x = supp, y = len, fill = supp)) +
+  geom_boxplot() + facet_grid(. ~ dose)+
+  labs(title="Tooth Growth by dose & supplement OJ/VC", x="Supplement type and dose (mg)", 
+     y="Tooth length"); 
+g
+```
+
+From the plot, it is clear that the higher the dosage of vitamin C, the longer the teeth get. However, there is no clear distinction between the effectiveness of the type of suppplement provided through orange juice or a dose of asorbic acid. We'll proceed then by analysing our data based on our null Hypothesis to confirm if the supplement method does actually have an impact or not on tooth growth in conjunction of the 3 different doses.
+
+#### 2. Determine if the Supplement method has an impact on tooth growth
+To determine if the delivery method of the supplement has an impact we will perform a student t.test comparing the length of teeth for guinea pigs assigned doses through Orange Juice (OJ) vs. Asorbic Acid(VC) and see if we get a p-value and confidence interval that allows us to reject our null hypothesis.
+
+_Null Hypothesis_ $H_0$: There is no difference between the method of receiving a dose of vitamin C, i.e, the difference between tooth length betwen OJ vs VC is nil. The alternative hypothesis $H_a$ being that OJ has more compelling impact on tooth growth than asorbic acid.
+
+```{r, echo=FALSE}
+testdataOJ <- subset(ToothGrowth[1:2], supp=="OJ")
+testdataVC <- subset(ToothGrowth[1:2], supp=="VC")
+```
+
+```{r, tidy=TRUE}
+test_ojvc <-t.test(testdataOJ$len, testdataVC$len, paired = FALSE, var.equal = FALSE, 
+       alternative = "greater", conf.level = 0.95); test_ojvc$p.value; test_ojvc$conf.int
+```
+_Observation:_ From the results, we get a p-value of 0.03 that is lower than our accepted $alpha=0.05$, which means that we reject our null hypothesis and OJ indeed has greater impat on tooth growth.
+
+#### 3. Determine If the combination of dosage and supplement has an impact on tooth growth
+Null Hypothesis $H_0$: There is no relation between the combination of OJ+dose vs VC+dose dose and tooth growth in guinea pigs. Note that since we have distinct guinea pigs, our t-test analysis will not be paired and since we don't have information, we will assume that the datasets to compare have different variances.
+
+```{r, echo=FALSE}
+dataOJ_0.5mg <- subset(ToothGrowth, dose==0.5 & supp=="OJ")
+dataVC_0.5mg <- subset(ToothGrowth, dose==0.5 & supp=="VC")
+dataOJ_1mg <- subset(ToothGrowth, dose==1 & supp=="OJ")
+dataVC_1mg <- subset(ToothGrowth, dose==1 & supp=="VC")
+dataOJ_2mg <- subset(ToothGrowth, dose==2 & supp=="OJ")
+dataVC_2mg <- subset(ToothGrowth, dose==2 & supp=="VC")
+```
+
+#####**OJ vs. VC supplement on a 0.5 mg/day dose**
+```{r, tidy=TRUE}
+# compare dose =0.5mg/day for OJ vc. VC
+test05_ojvc <- t.test(dataOJ_0.5mg$len, dataVC_0.5mg$len, paired = FALSE, var.equal = FALSE, conf.level = 0.95); test05_ojvc$p.value; test05_ojvc$conf.int
+```
+_Observation:_ 
+From the two sided t-test, we can see that the p-value of 0.006 is lower than our accepted error alpha. Therefore, we have 95% confidence to reject our null hypothesis and see that there is indeed a difference between the supplement's impact on tooth growth on a 0.5mg/day dose.
+
+#####**OJ vs. VC supplement on a 1 mg/day dose**
+```{r, tidy=TRUE}
+# compare dose =1mg/day for OJ vc. VC
+test1_ojvc <- t.test(dataOJ_1mg$len, dataVC_1mg$len, paired = FALSE, var.equal = FALSE, conf.level = 0.95); test1_ojvc$p.value; test1_ojvc$conf.int
+```
+_Observation:_ 
+From the two sided t-test, we can see that the p-value of 0.001 is lower than our accepted error alpha. Therefore, we have 95% confidence to reject our null hypothesis and see that there is indeed a difference in impact on tooth growth between a 1mg/day dose of OJ vs. 1mg/day dose of VC.
+
+#####**OJ vs. VC supplement on a 2 mg/day dose**
+```{r, tidy=TRUE}
+# compare dose of 2mg/day for OJ vc. VC
+test2_ojvc <- t.test(dataOJ_2mg$len, dataVC_2mg$len, paired = FALSE, var.equal = FALSE, conf.level = 0.95); test2_ojvc$p.value; test2_ojvc$conf.int
+```
+_Observation:_ 
+From the two sided, t-test, we can see that the p-value of 0.96 is much higher than the accepted error alpha, which means that we fail the reject the null hypothesis. There is therefore 95% confidence that there is no difference in the affectiveness of a 2mg/day dose in the form of Orange Juice vs. Adorbic Acid.
+
+## Conclusion
+
+From the numeric analysis and the plot of the data, we can confirm that a dose of vitamin C does indeed have an impact on tooth growth in guinear pig. However exploring the combination of dose and supplement method indicates that from dose *0.5* to *1mg per day*, *orange Juice* has a stronger impact on tooth growth than a dose of *asorbic* acid. Once the dosage is increased to *2mg/day* per guinea pig, there is no difference in the length of tooth growth between guinea pigs given orange juice or asorbic acid.
+
+
+\newpage
+## Appendix
+
+R code for the ToothGrowth by dose and supplement plot
+```{r, fig.height=3.5, fig.width=7}
+g <- ggplot(data = ToothGrowth, facets=~dose, aes(x = supp, y = len, fill = supp)) +
+  geom_boxplot() + facet_grid(. ~ dose)+
+  labs(title="ToothGrowth by dose and supplement type", x="Supplement type and dose (mg)", 
+     y="Tooth length"); g
+```

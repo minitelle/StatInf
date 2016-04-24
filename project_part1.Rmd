@@ -14,7 +14,7 @@ This project looks at simulations of averages of an **Exponential Distribution**
 In this analysis, we will perform 1000 simulations and explore the distribution of averages of 40 exponentials to:
 
 - Look at means of averages the 40 exponentials vs. the theroetical mean.
-- Looks at the Variance of our resulting distribution.
+- Look at the Variance of our resulting distribution.
 - Determine if we can approximate the distribution of averages of 40 exponentials to a normal distribution.
 
 ##### Set-up & Process
@@ -37,7 +37,7 @@ simExp <- rexp(nExp*simNo, rate = lambda)
 simMatrix <- matrix(simExp, simNo, nExp)
 ```
 #### 1. Calculation of the sample mean of the exponential distribution vs.the theoretical mean of the distribution.
-The mean of exponential distribution is $1/\lambda$, it will be referred to as the theoretical mean moving forward. We will start by calculating the sample mean and compare it to the theoretical mean. Then, we will plot the two statitics in a histogram that shows the density of the distribution of means resulting from the simulations.
+The mean of exponential distribution is $1/\lambda$, it will be referred to as the theoretical mean moving forward. We will start by calculating the sample mean and compare it to the theoretical mean. Then, we will plot the two statistics in a histogram that shows the density of the distribution of means resulting from the simulations.
 ```{r, echo = FALSE}
 # Mean for 1000 silumations of 40 exponentials
 simMean <- apply(simMatrix, 1, mean)
@@ -64,10 +64,10 @@ g <- ggplot(data = dtMean, aes(x = simMean)) +
 g
 ```
 
-_Observation:_ in order to highlight where the data centers, the sample mean from all the caluculated averages and the actual theoretical mean ($1/\lambda$) are plotted as horizental lines.The plot seems to indicate that averages of 40 exponentials are centered around the value  of _x = 5_ which is the mean of our theoretical distribution.
+_Conclusion:_ in order to highlight where the data centers, the sample mean from all the caluculated averages and the actual theoretical mean ($1/\lambda$) are plotted as vertical lines.The plot seems to indicate that averages of 40 exponentials are centered around the value  of _x = 5_ which is the mean of our theoretical distribution.
 
 #### 2. Show how variable the sample is (via variance) and compare it to the theoretical variance of the distribution.
-To see if the resulting dataset had some variability, we'll proceed to calculate the sample standard deviation and variance based on our sample mean. In addition, we will include the theoretical standard deviation and variance. Per the CLT, the theoreritcal variance equal to the variance of the underlying distribution ($1/\lambda$) divided by the sample size: ($1/\lambda$) / (sample size). 
+To see if the resulting dataset had some variability, we'll proceed to calculate the sample standard deviation and variance based on our sample mean. In addition, we will include the theoretical standard deviation and variance. Per the CLT, the theoreritcal variance equals to the variance of the underlying distribution ($1/\lambda$) divided by the sample size: ($1/\lambda$) / (sample size). 
 See R code:
 ```{r}
 # Sample Values for standard deviation and Variance
@@ -83,10 +83,10 @@ dtresults <- data.frame(c(sample_mean, theoretical_mean),
 colnames(dtresults) <- c("Mean", "Variance", "Standard Deviation")
 dtresults
 ```
-_Observation:_ from the summary table, we can see that the Sample variance `r sample_var` is pretty close to th theoretical variance of `r theoretical_var`.
+_Conclusion:_ from the summary table, we can see that the Sample variance `r sample_var` is pretty close to th theoretical variance of `r theoretical_var`.
 
 #### 3. Show that the distribution is approximately normal.
-In order to assess the 'normality' of our exponential distribution, we can first plot our observations density with the one of a normal in our previous graph to see how our data is cented. As a second step We will use the qqnorm and qqline function in R, which will result in a plot comparing our dataset of 1000 samples of 40 exponentials (on the y axis) with a standard normal distribution (on the x axis). If our data set is normally distributed, then the data points should fall along the line produced by the qqline command.
+In order to assess the 'normality' of our exponential distribution, we can first plot our observation's density with the one of a normal in our previous graph to see how our data is cented. As a second step We will use the qqnorm and qqline function in R, which will result in a plot comparing our dataset of 1000 samples of 40 exponentials (on the y axis) with a standard normal distribution (on the x axis). If our data set is normally distributed, then the data points should fall along the line produced by the qqline function.
 
 Figure 2 (See appendix for R code)
 
@@ -110,11 +110,12 @@ qqnorm(simMean, main ="Simulation Mean vs. Normal Q-Q Plot")
 qqline(simMean, col = "2")
 ```
 
-_Observation:_
-From the QQNorm plot, we can see that our average calculations from the exponential distribution are centered around the Normal QQ line as per the Central Limit theorem. However, with increasing the number of simulation from 1000 to 10000 the result would probably look much more aligned.
+_Conclusion:_
+From the QQNorm plot, we can see that our average calculations from the exponential distribution are centered around the Normal QQ line as per the Central Limit theorem. We can assume that by increasing the number of simulation from 1000 to 10000 the result would probably look much more aligned.
 
 Based on these calulculation of mean, standard deviation and variance, we can infer that the averages of the exponential distribution follow the princicple of the CLT in regards of following a fairly normal distribution.
 
+\newpage
 #### Appendix
 
 ###### Figure 1 R code
